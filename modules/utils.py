@@ -72,8 +72,7 @@ def plot_history(history, n, g):
     plt.ylabel("Percentage of nodes")
 
     plt.ylim(0, 105)
-    plt.xlim(0, 12)
-    plt.xticks(range(0, 13))
+    plt.xlim(0, generations - 1)
 
     plt.legend(loc='upper center', bbox_to_anchor=(0.5, -0.15), ncol=4, frameon=False)
     plt.tight_layout()
@@ -119,7 +118,7 @@ def plot_comparative_history(all_histories, grid_size, output_folder):
         plt.ylabel('Number of nodes')
 
         plt.xlim(0, generations - 1) # O eixo X acompanha o total de gerações dinamicamente
-        
+
         plt.legend()
         plt.grid(True)
         plt.tight_layout()

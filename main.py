@@ -59,7 +59,7 @@ def initiate_simulations():
 
             sim = Simulator(size=g, neighborhood=n)
 
-            for gen in range(12, total_gens):
+            for gen in range(total_gens):
                 plot_grid_generation(sim, gen, folder_path)
                 sim.step()
                 
