@@ -7,13 +7,12 @@ from modules.engine import Simulator
 import csv
 import os
 
-def plot_grid_generation(sim, gen_number, folder_path):
+def plot_grid_generation(sim, gen_number, folder_path, p_str):
     plt.figure(figsize=(4, 4))
-    
-    # Soma +1 nos estados para que o menor valor (-1) vire 0 e case com a paleta
+
     bg_numeric = sim.states + 1 
     
-    # Índices: 0(S_init), 1(E), 2(I1), 3(I2), 4(R), 5(S_ciclo)
+    # i: 0(S_init), 1(E), 2(I1), 3(I2), 4(R), 5(S_cicle)
     cmap = ListedColormap(['#FFFACD', '#D3D3D3', '#FFFFFF', '#FFFFFF', '#FFFFFF', '#FFFACD'])
     
     plt.imshow(bg_numeric, cmap=cmap, vmin=0, vmax=5)
@@ -26,8 +25,6 @@ def plot_grid_generation(sim, gen_number, folder_path):
             state = sim.states[i, j]
             label = sim.labels[i, j]
             
-            # O texto só aparece se a label for <= geração atual E se o estado não for -1.
-            # Isso garante que no Exposto(Geração Inicial), o fundo seja Cinza e o texto fique invisível!
             if label != -1 and label <= gen_number:
                 if state in [1, 2]:
                     text_color = 'red'          
@@ -44,19 +41,17 @@ def plot_grid_generation(sim, gen_number, folder_path):
     plt.yticks(np.arange(-.5, rows, 1), [])
     plt.tick_params(axis='both', which='both', length=0)
     
-    plt.title(f'Generation {gen_number}')
+    plt.title(f'Generation Generation {gen_number} | p = {p_str}')
     plt.tight_layout()
-    plt.savefig(f"{folder_path}/grid_gen_{gen_number}.png", dpi=300)
+    plt.savefig(f"{folder_path}/grid_gen_{gen_number}_{p_str}.png", dpi=300)
     plt.close()
 
 
-def plot_history(history, n, g):
+def plot_history(history, n, g, p_str, folder_path):
     
     total_nodes = g * g
-    #total_nodes = history['Susceptible'][0] + history['Exposed'][0] + history['Infected'][0] + history['Recovered'][0]
 
     plt.figure(figsize=(6, 5))
-
     styles = {'Susceptible': ':', 'Exposed': ':', 'Infected': ':', 'Recovered': ':'}
     colors = {'Susceptible': 'blue', 'Exposed': 'orange', 'Infected': 'red', 'Recovered': 'green'}
 
@@ -67,7 +62,7 @@ def plot_history(history, n, g):
         plt.plot(percentage_data, label=state, color=colors[state], 
                  linestyle=styles[state], linewidth=2, marker='o', markersize=1)
     
-    plt.title(f"SEIRS Model\n{n} neighborhood, N = {g}")
+    plt.title(f"SEIRS Model\n{n} neighborhood, N = {g}, p = {p_str}")
     plt.xlabel("Generation")
     plt.ylabel("Percentage of nodes")
 
@@ -77,7 +72,7 @@ def plot_history(history, n, g):
     plt.legend(loc='upper center', bbox_to_anchor=(0.5, -0.15), ncol=4, frameon=False)
     plt.tight_layout()
 
-    output_path = f"images/{n}_grid_{g}/epidemic_curves.png"
+    output_path = os.path.join(folder_path, "epidemic_curves.png")
     plt.savefig(output_path)
     plt.close()
 
@@ -91,7 +86,6 @@ def save_history_to_csv(history, folder_path):
         writer = csv.writer(file)
         writer.writerow(['Generation', 'S', 'E', 'I', 'R'])
         
-        # Escreve os dados linha por linha
         generations = len(history['Susceptible'])
         for i in range(generations):
             writer.writerow([
@@ -103,24 +97,28 @@ def save_history_to_csv(history, folder_path):
             ])
 
 
-def plot_comparative_history(all_histories, grid_size, output_folder):
+def plot_comparative_history(all_histories, grid_size, p_str, output_folder):
     states = ['Susceptible', 'Exposed', 'Infected', 'Recovered']
-    
-    generations = len(all_histories['VN']['Susceptible'])
+    total_nodes = grid_size * grid_size
+    generations = len(all_histories['moore']['Susceptible'])
+
+
+    first_neigh = list(all_histories.keys())[0]
+    generations = len(all_histories[first_neigh]['Susceptible'])
 
     for state in states:
         plt.figure(figsize=(8, 5))
         for neigh, history in all_histories.items():
-            plt.plot(range(len(history[state])), history[state], label=neigh)
+            plt.plot(history[state], label=neigh, linewidth=2)
         
-        plt.title(f'Evolution of the {state.upper()} nodes (Grid: {grid_size})')
+        plt.title(f'Evolution of the {state.upper()} nodes (Grid: {grid_size}), p = {p_str}')
         plt.xlabel('Generation')
         plt.ylabel('Number of nodes')
 
-        plt.xlim(0, generations - 1) # O eixo X acompanha o total de gerações dinamicamente
+        plt.xlim(0, generations - 1)
 
         plt.legend()
         plt.grid(True)
         plt.tight_layout()
-        plt.savefig(f"{output_folder}/comparative_{state}_N{grid_size}.png")
+        plt.savefig(f"{output_folder}/comparative_{state}_N{grid_size}_p{p_str}.png")
         plt.close()

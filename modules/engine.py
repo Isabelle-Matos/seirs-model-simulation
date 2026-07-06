@@ -2,10 +2,11 @@ import numpy as np
 from collections import deque
 
 class Simulator:
-    def __init__(self, size, neighborhood):
+    def __init__(self, size, neighborhood, p=0.0):
         self.size = size
         self.neighborhood = neighborhood
-        
+        self.p = p
+
         # -1 = Susceptible Initial (needs contact) = -1
         # 0 = Exposed, 1 = Infected(g1), 2 = Infected(g2), 3 = Recovered, 4 = Susceptible(cycle)
         self.states = np.full((size, size), -1, dtype=int)
@@ -52,7 +53,10 @@ class Simulator:
         for i in range(self.size):
             for j in range(self.size):
                 if self.states[i, j] != -1:
-                    new_states[i, j] = (self.states[i, j] + 1) % 5
+                    if self.states[i,j] == 0 and np.random.rand() < self.p:
+                        new_states[i, j] = 3
+                    else:
+                        new_states[i, j] = (self.states[i, j] + 1) % 5
 
         # PASS 2: Initial susceptible nodes (-1) become exposed (0) if they have an infected neighbor (1 or 2)
         for i in range(self.size):
