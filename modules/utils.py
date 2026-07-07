@@ -1,5 +1,8 @@
 # Contains auxiliars functions
 
+import glob
+import pandas as pd 
+
 import matplotlib.pyplot as plt
 import numpy as np
 from matplotlib.colors import ListedColormap
@@ -122,3 +125,56 @@ def plot_comparative_history(all_histories, grid_size, p_str, output_folder):
         plt.tight_layout()
         plt.savefig(f"{output_folder}/comparative_{state}_N{grid_size}_p{p_str}.png")
         plt.close()
+
+def analyze_results(root_path, exit_path):
+    if not os.path.exists(exit_path):
+        os.makedirs(exit_path)
+
+    files = glob.glob(os.path.join(root_path, "**", "stats.csv"), recursive=True)
+    result = []
+
+    for f in files:
+        slice = f.split(os.sep)
+        p_valor = float(slice[-3].split('_')[1])
+        config_grid = slice[-2] # Ex: L_grid_10
+        
+        df = pd.read_csv(f)
+        
+        estability = df['I'].std() 
+        max_infected = df['I'].max()
+        
+        result.append({
+            'p': p_valor, 
+            'config': config_grid, 
+            'I_max': max_infected, 
+            'estabilidade_std': estability
+        })
+
+    df_resume = pd.DataFrame(result)
+    
+    df_resume.to_csv(os.path.join(exit_path, "complete_analysis.csv"), index=False)
+    df_stable = df_resume.nsmallest(3, 'estabilidade_std')
+    df_stable.to_csv(os.path.join(exit_path, "cenarios_mais_estaveis.csv"), index=False)
+    
+    df_resume['grid_size'] = df_resume['config'].apply(lambda x: x.split('_')[-1])
+
+    for size in df_resume['grid_size'].unique():
+        plt.figure(figsize=(8, 5))
+        subset_grid = df_resume[df_resume['grid_size'] == size]
+        
+        for config in subset_grid['config'].unique():
+            subset_config = subset_grid[subset_grid['config'] == config]
+            plt.plot(subset_config['p'], subset_config['estabilidade_std'], 
+                     marker='o', label=config)
+        
+        plt.title(f'Estabilidade do Sistema: Grid {size}x{size}')
+        plt.xlabel('Fator Humano (p)')
+        plt.ylabel('Desvio Padrão da Instabilidade')
+        plt.legend()
+        plt.grid(True, linestyle='--', alpha=0.7)
+        plt.tight_layout()
+        
+        plt.savefig(os.path.join(exit_path, f"grafico_estabilidade_grid_{size}.png"))
+        plt.close() 
+
+    print(f"Análise concluída com sucesso! Gráficos salvos em: {exit_path}")
