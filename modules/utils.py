@@ -169,7 +169,7 @@ def analyze_results(root_path, exit_path):
         
         plt.title(f'Estabilidade do Sistema: Grid {size}x{size}')
         plt.xlabel('Fator Humano (p)')
-        plt.ylabel('Desvio Padrão da Instabilidade')
+        plt.ylabel('Desvio Padrão do Número de Infectados')
         plt.legend()
         plt.grid(True, linestyle='--', alpha=0.7)
         plt.tight_layout()
