@@ -17,6 +17,10 @@ Para acessar as diferentes versões do projeto, utilize os comandos do Git para 
    ```bash
    git checkout master
 
+2. Para acessar o modelo estendido (Human-Factor):
+    ```bash
+   git checkout master
+
 ## Referências 
 [1] Peng, S., Wang, G., & Yu, S. (2013). Modeling the dynamics of worm propagation using two-dimensional cellular automata in smartphones. Journal of Computer and System Sciences, 79(4), 586-595.
 
