@@ -19,4 +19,5 @@ Para acessar as diferentes versões do projeto, utilize os comandos do Git para 
 
 ## Referências 
 [1] Peng, S., Wang, G., & Yu, S. (2013). Modeling the dynamics of worm propagation using two-dimensional cellular automata in smartphones. Journal of Computer and System Sciences, 79(4), 586-595.
+
 [2] Signes-Pont, M. T., Cortés-Castillo, A., Mora-Mora, H., & Szymanski, J. (2018). Modelling the malware propagation in mobile computer devices. Computers & Security, 79, 80-93
