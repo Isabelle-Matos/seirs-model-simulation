@@ -147,14 +147,14 @@ def analyze_results(root_path, exit_path):
             'p': p_valor, 
             'config': config_grid, 
             'I_max': max_infected, 
-            'estabilidade_std': estability
+            'stability_std': estability
         })
 
     df_resume = pd.DataFrame(result)
     
     df_resume.to_csv(os.path.join(exit_path, "complete_analysis.csv"), index=False)
-    df_stable = df_resume.nsmallest(3, 'estabilidade_std')
-    df_stable.to_csv(os.path.join(exit_path, "cenarios_mais_estaveis.csv"), index=False)
+    df_stable = df_resume.nsmallest(3, 'stability_std')
+    df_stable.to_csv(os.path.join(exit_path, "stable_cenarios.csv"), index=False)
     
     df_resume['grid_size'] = df_resume['config'].apply(lambda x: x.split('_')[-1])
 
@@ -164,7 +164,7 @@ def analyze_results(root_path, exit_path):
         
         for config in subset_grid['config'].unique():
             subset_config = subset_grid[subset_grid['config'] == config]
-            plt.plot(subset_config['p'], subset_config['estabilidade_std'], 
+            plt.plot(subset_config['p'], subset_config['stability_std'], 
                      marker='o', label=config)
         
         plt.title(f'Estabilidade do Sistema: Grid {size}x{size}')
@@ -174,7 +174,5 @@ def analyze_results(root_path, exit_path):
         plt.grid(True, linestyle='--', alpha=0.7)
         plt.tight_layout()
         
-        plt.savefig(os.path.join(exit_path, f"grafico_estabilidade_grid_{size}.png"))
+        plt.savefig(os.path.join(exit_path, f"stability_plot_grid_{size}.png"))
         plt.close() 
-
-    print(f"Análise concluída com sucesso! Gráficos salvos em: {exit_path}")

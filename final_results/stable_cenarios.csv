@@ -1,4 +1,4 @@
-p,config,I_max,estabilidade_std
+p,config,I_max,stability_std
 1.0,L_grid_100,1,0.1342200153122676
 1.0,moore_grid_100,1,0.1342200153122676
 1.0,L_grid_50,1,0.1740358053345964
