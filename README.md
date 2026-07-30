@@ -1,27 +1,26 @@
-# Simulação de Propagação de Malware: SEIRS e Correção Humana
+# Malware Propagation Simulation: SEIRS and Human Correction
 
-Este repositório contém a implementação do modelo epidemiológico SEIRS baseada em autômatos celulares, utilizada para a análise da propagação de *malware* em redes de dispositivos móveis. O projeto utiliza *branches* distintas para diferenciar o modelo base da extensão proposta.
+This repository contains the implementation of an epidemiological SEIRS model based on cellular automata, used to analyze malware propagation in mobile device networks. The project uses distinct branches to differentiate the base model from the proposed extension.
 
-## Estrutura das Branches
+## Branch Structure
 
-O código está organizado da seguinte forma:
+The code is organized as follows:
 
-* `master`: Contém a implementação original da propagação conforme a metodologia de [1, 2]. Esta *branch* simula a dinâmica de infecção sem intervenção externa, servindo como referência para validação.
-* `feature/human-factor`: Contém a versão estendida que introduz o fator humano ($p$) como variável de mitigação. Esta implementação permite analisar como a tomada de decisão individual atua na contenção do surto infeccioso em diferentes topologias de vizinhança.
+* `master`: Contains the original implementation of the propagation methodology according to [1, 2]. This branch simulates infection dynamics without external intervention, serving as a baseline for validation.
+* `feature/human-factor`: Contains the extended version that introduces the human factor ($p$) as a mitigation variable. This implementation allows analyzing how individual decision-making acts to contain the infectious outbreak across different neighborhood topologies.
 
-## Como Executar
+## How to Run
 
-Para acessar as diferentes versões do projeto, utilize os comandos do Git para alternar entre as *branches*:
+To access the different versions of the project, use Git commands to switch between branches:
 
-1. Para acessar o modelo base:
+1. To access the base model:
    ```bash
    git checkout master
+2. To access the extended model (Human-Factor):
+   ```bash
+   git checkout feature/human-factor
 
-2. Para acessar o modelo estendido (Human-Factor):
-    ```bash
-   git checkout master
-
-## Referências 
+## References
 [1] Peng, S., Wang, G., & Yu, S. (2013). Modeling the dynamics of worm propagation using two-dimensional cellular automata in smartphones. Journal of Computer and System Sciences, 79(4), 586-595.
 
-[2] Signes-Pont, M. T., Cortés-Castillo, A., Mora-Mora, H., & Szymanski, J. (2018). Modelling the malware propagation in mobile computer devices. Computers & Security, 79, 80-93
+[2] Signes-Pont, M. T., Cortés-Castillo, A., Mora-Mora, H., & Szymanski, J. (2018). Modelling the malware propagation in mobile computer devices. Computers & Security, 79, 80-93.
